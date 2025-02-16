@@ -1,0 +1,155 @@
+// Importance must be setting in MySQL
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+SET @@global.sql_mode= 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+
+
+
+// insert role
+insert into roles(name) values ('ROLE_USER');
+insert into roles(name) values ('ROLE_MANAGE');
+insert into roles(name) values ('ROLE_ADMIN');
+
+UPDATE `trouytin_db`.`roles` SET `description` = 'Thành viên' WHERE (`id` = '1');
+UPDATE `trouytin_db`.`roles` SET `description` = 'Quản lý tin' WHERE (`id` = '2');
+UPDATE `trouytin_db`.`roles` SET `description` = 'Admin' WHERE (`id` = '3');
+UPDATE `trouytin_db`.`roles` SET `description` = 'Quản lý trọ' WHERE (`id` = '4');
+
+
+
+// Change order column in post table
+ALTER TABLE `trouytin_db`.`posts`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `title` `title` VARCHAR(255) NULL DEFAULT NULL AFTER `id`,
+CHANGE COLUMN `address` `address` VARCHAR(255) NULL DEFAULT NULL AFTER `title`,
+CHANGE COLUMN `description` `description` VARCHAR(255) NULL DEFAULT NULL AFTER `address`,
+CHANGE COLUMN `object` `object` VARCHAR(255) NULL DEFAULT NULL AFTER `description`,
+CHANGE COLUMN `convenient` `convenient` VARCHAR(255) NULL DEFAULT NULL AFTER `object`,
+CHANGE COLUMN `surroundings` `surroundings` VARCHAR(255) NULL DEFAULT NULL AFTER `convenient`,
+CHANGE COLUMN `post_type_id` `post_type_id` BIGINT NULL DEFAULT NULL AFTER `surroundings`,
+CHANGE COLUMN `author_id` `author_id` BIGINT NULL DEFAULT NULL AFTER `post_type_id`,
+CHANGE COLUMN `created_date` `created_date` DATETIME(6) NOT NULL AFTER `is_deleted`;
+
+// Change order column in post type table
+ALTER TABLE `trouytin_db`.`post_types`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `code` `code` VARCHAR(255) NULL DEFAULT NULL AFTER `id`,
+CHANGE COLUMN `name` `name` VARCHAR(255) NULL DEFAULT NULL AFTER `code`;
+
+ALTER TABLE `trouytin_db`.`ratings`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `post_id` `post_id` BIGINT NULL DEFAULT NULL AFTER `star_point`,
+CHANGE COLUMN `user_id` `user_id` BIGINT NULL DEFAULT NULL AFTER `post_id`;
+
+ALTER TABLE `trouytin_db`.`users`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `user_name` `user_name` VARCHAR(255) NULL DEFAULT NULL AFTER `id`,
+CHANGE COLUMN `phone_number` `phone_number` VARCHAR(255) NULL DEFAULT NULL AFTER `user_name`,
+CHANGE COLUMN `password_hash` `password_hash` VARCHAR(255) NULL DEFAULT NULL AFTER `phone_number`,
+CHANGE COLUMN `email` `email` VARCHAR(255) NULL DEFAULT NULL AFTER `password_hash`,
+CHANGE COLUMN `address` `address` VARCHAR(255) NULL DEFAULT NULL AFTER `email`,
+CHANGE COLUMN `images` `images` VARCHAR(255) NULL DEFAULT NULL AFTER `address`,
+CHANGE COLUMN `date_of_birth` `date_of_birth` DATETIME(6) NULL DEFAULT NULL AFTER `images`,
+CHANGE COLUMN `phone_number_confirmed` `phone_number_confirmed` BIT(1) NULL DEFAULT NULL AFTER `date_of_birth`,
+CHANGE COLUMN `two_factor_enable` `two_factor_enable` BIT(1) NULL DEFAULT NULL AFTER `phone_number_confirmed`,
+CHANGE COLUMN `modified_by` `modified_by` BIGINT NULL DEFAULT NULL AFTER `created_by`;
+
+
+
+// Insert value in post table
+INSERT INTO `trouytin_db`.`posts` (`title`, `address`, `description`, `object`, `convenient`, `surroundings`, `post_type_id`, `author_id`, `is_deleted`, `created_date`, `created_by`, `room_id`) VALUES ('Nhà Trọ Thiên Vương', 'Điện Bàn - Điện Ngọc - Quảng Nam', 'Đầy đủ tiện nghi', 'Tất cả', 'Wifi, Điều hòa, Máy Giặt', 'Đại Học FPT', '1', '1', b'0', '2023-9-8', b'1', b'1');
+INSERT INTO `trouytin_db`.`posts` (`title`, `address`, `description`, `object`, `convenient`, `surroundings`, `post_type_id`, `author_id`, `is_deleted`, `created_date`, `created_by`, `room_id`) VALUES ('Nhà Trọ Hữu Nghị', 'Cam Lộ - Quảng Trị', 'Đầy đủ tiện nghi', 'Nam', 'Wifi, Điều hòa, Máy Giặt', 'Đại Học Việt Hàn, Chợ Cam Lộ', '1', '1', b'0', '2023-9-8', b'1', '2');
+INSERT INTO `trouytin_db`.`posts` (`title`, `address`, `description`, `object`, `convenient`, `surroundings`, `post_type_id`, `author_id`, `is_deleted`, `created_date`, `created_by`, `room_id`) VALUES ('Nhà Trọ Việt Mỹ', 'Đông Hà - Quảng Trị', 'Đầy đủ tiện nghi', 'Nữ', 'Wifi, Điều hòa, Máy Giặt', 'Chợ, Trường Tiểu Học', '1', '1', b'0', '2023-9-8', b'1', '3');
+
+INSERT INTO `trouytin_db`.`posts` (`title`, `address`, `description`, `object`, `convenient`, `surroundings`, `post_type_id`, `author_id`, `is_deleted`, `created_date`, `created_by`, `room_id`)
+VALUES ('Nhà Trọ Hữu Thắng', 'Điện Bàn - Điện Ngọc - Quảng Bình', 'Đầy đủ tiện nghi', 'Tất cả', 'Wifi, Điều hòa, Máy Giặt', 'Đại Học FPT', '1', '1', b'0', '2023-9-8', '1', '5');
+INSERT INTO `trouytin_db`.`posts` (`title`, `address`, `description`, `object`, `convenient`, `surroundings`, `post_type_id`, `author_id`, `is_deleted`, `created_date`, `created_by`, `room_id`)
+VALUES ('Nhà Trọ Tố Kiên', 'Ba Thung - Cam Tuyền - Cam Lộ - Quảng Trị', 'Đầy đủ tiện nghi', 'Nam', 'Wifi, Điều hòa, Máy Giặt', 'Đại Học Huế Tại Quảng Trị, Chợ Cam Tuyền', '1', '1', b'0', '2023-9-8', '1', '6');
+INSERT INTO `trouytin_db`.`posts` (`title`, `address`, `description`, `object`, `convenient`, `surroundings`, `post_type_id`, `author_id`, `is_deleted`, `created_date`, `created_by`, `room_id`)
+VALUES ('Nhà Trọ Việt Đông', 'Đông Hà - Quảng Trị', 'Đầy đủ tiện nghi', 'Nữ', 'Wifi, Điều hòa, Máy Giặt, Sân Thượng, Nhà Gửi Xe', 'Chợ, Trường Tiểu Học, Trường Cấp 3 Nguyễn Tri Phương', '1', '1', b'0', '2023-9-8', '1', '7');
+INSERT INTO `trouytin_db`.`posts` (`title`, `address`, `description`, `object`, `convenient`, `surroundings`, `post_type_id`, `author_id`, `is_deleted`, `created_date`, `created_by`, `room_id`)
+VALUES ('Nhà Trọ Việt Á', 'Quận 1 - Thành Phố Hồ Chí Minh', 'Đầy đủ tiện nghi', 'Nữ', 'Wifi, Nhà gửi xe', 'Chợ, Sân Bóng', '1', '1', b'0', '2023-11-13', '1', '4');
+
+// filter
+Select p.id, p.title, p.address, p.created_date, ir.price, p.is_deleted, max(pimg.image_url_list) as image
+from posts p
+left join post_entity_image_url_list pimg
+on p.id = pimg.post_entity_id
+inner join infor_rooms ir
+on ir.id = p.room_id
+where object LIKE '%Tat Ca%' AND price BETWEEN 0 AND 1000000
+group by p.id, p.title, p.address, p.created_by, p.created_date, ir.price, p.is_deleted
+order by p.created_date DESC
+LIMIT 3 OFFSET 0;
+
+// select post with rating desc
+Select p.id, p.title, p.address, p.created_date, i.price,p.is_deleted, max(pimg.image_url_list) as image, AVG(r.star_point) as average_rating
+from posts p
+left join ratings r on p.id = r.post_id
+inner join infor_rooms i on p.room_id = i.id
+inner join post_entity_image_url_list pimg on pimg.post_entity_id = p.id
+group by p.id
+Order by average_rating desc;
+
+ALTER TABLE `trouytin_db`.`posts`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `title` `title` VARCHAR(255) NULL DEFAULT NULL AFTER `id`,
+CHANGE COLUMN `address` `address` VARCHAR(255) NULL DEFAULT NULL AFTER `title`,
+CHANGE COLUMN `description` `description` VARCHAR(255) NULL DEFAULT NULL AFTER `address`,
+CHANGE COLUMN `object` `object` VARCHAR(255) NULL DEFAULT NULL AFTER `description`,
+CHANGE COLUMN `convenient` `convenient` VARCHAR(255) NULL DEFAULT NULL AFTER `object`,
+CHANGE COLUMN `surroundings` `surroundings` VARCHAR(255) NULL DEFAULT NULL AFTER `convenient`,
+CHANGE COLUMN `post_type_id` `post_type_id` BIGINT NULL DEFAULT NULL AFTER `surroundings`,
+CHANGE COLUMN `author_id` `author_id` BIGINT NULL DEFAULT NULL AFTER `post_type_id`,
+CHANGE COLUMN `created_date` `created_date` DATETIME(6) NOT NULL AFTER `is_deleted`;
+
+ALTER TABLE `trouytin_db`.`post_types`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `code` `code` VARCHAR(255) NULL DEFAULT NULL AFTER `id`,
+CHANGE COLUMN `name` `name` VARCHAR(255) NULL DEFAULT NULL AFTER `code`;
+
+ALTER TABLE `trouytin_db`.`ratings`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `post_id` `post_id` BIGINT NULL DEFAULT NULL AFTER `star_point`,
+CHANGE COLUMN `user_id` `user_id` BIGINT NULL DEFAULT NULL AFTER `post_id`;
+
+ALTER TABLE `trouytin_db`.`users`
+CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
+CHANGE COLUMN `user_name` `user_name` VARCHAR(255) NULL DEFAULT NULL AFTER `id`,
+CHANGE COLUMN `phone_number` `phone_number` VARCHAR(255) NULL DEFAULT NULL AFTER `user_name`,
+CHANGE COLUMN `password_hash` `password_hash` VARCHAR(255) NULL DEFAULT NULL AFTER `phone_number`,
+CHANGE COLUMN `email` `email` VARCHAR(255) NULL DEFAULT NULL AFTER `password_hash`,
+CHANGE COLUMN `address` `address` VARCHAR(255) NULL DEFAULT NULL AFTER `email`,
+CHANGE COLUMN `images` `images` VARCHAR(255) NULL DEFAULT NULL AFTER `address`,
+CHANGE COLUMN `date_of_birth` `date_of_birth` DATETIME(6) NULL DEFAULT NULL AFTER `images`,
+CHANGE COLUMN `phone_number_confirmed` `phone_number_confirmed` BIT(1) NULL DEFAULT NULL AFTER `date_of_birth`,
+CHANGE COLUMN `two_factor_enable` `two_factor_enable` BIT(1) NULL DEFAULT NULL AFTER `phone_number_confirmed`,
+CHANGE COLUMN `modified_by` `modified_by` BIGINT NULL DEFAULT NULL AFTER `created_by`;
+
+insert into roles(name) values ('ROLE_USER');
+insert into roles(name) values ('ROLE_MANAGE');
+insert into roles(name) values ('ROLE_ADMIN');
+
+INSERT INTO `users` VALUES (1,'Admin','+84332101032','$2a$10$UDwbIXew/D9/ulUMXCPZSebhIj5kGJD/zGQHlQpeVUZXkVmLEnsqO','thanglhde150360@fpt.edu.vn','27 Trần hưng đạo','http://res.cloudinary.com/dqj1yqlkb/image/upload/v1700062761/708c3d80-e8ca-4f8a-a8f5-36fc294709bb.png','2023-11-15 07:00:00.000000',_binary '',_binary '',_binary '',_binary '\0',0,1,'2023-11-15 10:37:57.895000','2023-11-15 22:39:40.664000'),(2,'Managerment','+84332101033','$2a$10$hw7pC9LJpb2pxpGVJszJbegiAWpcO.yjk5phz.Zb4kg0kdFruodDW','lehuuthang12a3thptcl@gmail.com','Nhà đất thiên an,thị xã Điện Bàn,xã Điện Hoà,Quảng Nam','http://res.cloudinary.com/dqj1yqlkb/image/upload/v1701008695/9916a053-70d5-4dcb-be33-778893c39936.png','2023-11-26 07:00:00.000000',_binary '\0',_binary '\0',_binary '',_binary '\0',0,2,'2023-11-15 23:31:59.877000','2023-11-26 21:24:58.577000'),(3,'User','+84332101034','$2a$10$t.Ui1jXQ8ykpcpSHSTtxbecw7oKvhFbKSZ/CkqjPzIp75fwCJj0aG',NULL,NULL,NULL,NULL,_binary '\0',_binary '\0',_binary '',_binary '\0',0,NULL,'2023-11-20 00:53:24.075000',NULL);
+
+INSERT INTO `post_types` VALUES (1,'NHATRO','Nhà Trọ',_binary '\0',1,'2023-11-15 11:19:13.661000',NULL,NULL),(2,'CANHO','Căn Hộ',_binary '\0',1,'2023-11-15 11:21:10.394000',NULL,NULL);
+
+INSERT INTO `trouytin_db`.`infor_rooms` (`acreage`, `electricity_price`, `empty_room`, `number_room`, `price`, `staymax`, `water_price`) VALUES ('20', '3000', '20', '30', '2000000', '5', '3000');
+INSERT INTO `trouytin_db`.`infor_rooms` (`acreage`, `electricity_price`, `empty_room`, `number_room`, `price`, `staymax`, `water_price`) VALUES ('20', '3000', '20', '30', '3000000', '5', '3000');
+INSERT INTO `trouytin_db`.`infor_rooms` (`acreage`, `electricity_price`, `empty_room`, `number_room`, `price`, `staymax`, `water_price`) VALUES ('20', '3000', '20', '30', '6000000', '5', '3000');
+INSERT INTO `trouytin_db`.`infor_rooms` (`acreage`, `electricity_price`, `empty_room`, `number_room`, `price`, `staymax`, `water_price`) VALUES ('20', '3000', '20', '30', '7000000', '5', '3000');
+
+INSERT INTO `posts` VALUES (1,'Nhà Trọ Bình Yên','19 Văn Hiến, Xã Lũng Cú, Huyện Cao Bằng, Tỉnh Hà Giang','Nhà Trọ Đẹp, Sạch Sẽ','Tất Cả','Nhà Xe, Gác Xếp, Máy Giặt','Gần trường đại học việt mĩ',1,1,_binary '\0','2023-11-15 21:40:36.597000',1,1,'2023-11-29 01:25:38.574000',1,NULL,'REVIEW'),(2,'Nhà Trọ Bình Hương Cảng','17 Trần Bình Hương, Phường Đông Giang, Thành phố Đông Hà, Tỉnh Quảng Trị','<p>Tiện nghi đầy đủ</p>','Nam','Gác lửng,Phòng tắm,Máy giặt,Ban công / Sân thượng,Camara an ninh,Wifi,Vệ sinh trong,Tủ quần áo,Giường nệm','Gần chợ non nước , Trường đại học Phan Châu Trinh',1,1,_binary '\0','2023-11-15 21:45:23.333000',1,1,'2023-11-27 18:49:16.337000',2,NULL,'APPROVED'),(4,'Nhà Trọ Nguyễn Thị Thoại','27 Trần Hưng Đạo, Xã Thượng Hà, Huyện Bảo Lạc, Tỉnh Cao Bằng','<p>Tốt</p>','Nữ','Phòng tắm,Gác lửng','Trường Tiểu Học Trần Hưng Đạo',1,1,_binary '\0','2023-11-15 22:17:59.408000',1,NULL,NULL,4,NULL,'APPROVED'),(5,'Nhà Trọ Hạnh Đơn','19 Văn Hiến, Xã Lũng Cú, Huyện Cao Bằng, Tỉnh Hà Giang','Nhà Trọ Đẹp, Sạch Sẽ','Tất Cả','Nhà Xe, Gác Xếp, Máy Giặt','Gần trường đại học việt mĩ',1,1,_binary '\0','2023-11-17 01:36:39.773000',1,1,'2023-11-27 15:28:02.362000',5,NULL,'APPROVED');
+
+INSERT INTO `post_entity_image_url_list` VALUES (2,'http://res.cloudinary.com/dqj1yqlkb/image/upload/v1700059519/846b693d-9a97-474e-adcb-7ec1bf11cc39.jpg'),(4,'http://res.cloudinary.com/dqj1yqlkb/image/upload/v1700061475/4d32c962-83f0-4fa2-b588-468fa30eff18.png')
+
+
+select * from wishlist_items as wi
+inner join wishlists as w on w.wishlist_id = wi.wishlist_id
+inner join posts as p on wi.post_id = p.id where w.user_id = 2
+
+
+
+// delete constraint in column status
+ALTER TABLE posts
+DROP CHECK posts_chk_1;
