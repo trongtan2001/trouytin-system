@@ -25,7 +25,7 @@ public class ProvinceService {
     private String getImageUrlForProvince(String provinceName) {
         switch (provinceName) {
             case "Thành phố Hà Nội" -> {
-                return "https://media.vietravel.com/images/News/ha-noi-1.jpg";
+                return "https://dulich9.com/wp-content/uploads/2024/02/Quan-truong-Ba-Dinh-o-dau.webp";
             }
             case "Thành Phố Hồ Chí Minh" -> {
                 return "https://hnm.1cdn.vn/2023/01/06/hanoimoi.com.vn-uploads-images-lequyen-2023-01-_1-3-.jpg";

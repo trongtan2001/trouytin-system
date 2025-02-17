@@ -20,9 +20,9 @@ public class DatabaseSearch implements IDatabaseSearch {
     private PostTypeRepository repository;
     @Override
     public SearchResult searchFilter(Pageable pageable, LinkedHashMap<String, Object> map) throws SQLException {
-        String url = "jdbc:mysql://srv1098.hstgr.io/u898129453_testdb";
-        String username = "u898129453_root25";
-        String password = "123456789Aaa!";
+        String url = "jdbc:mysql://localhost:3306/roomster?useSSL=false&serverTimezone=UTC";
+        String username = "root";
+        String password = "123456";
         String tableName = "posts";
         String joinTable = "infor_rooms";
 
